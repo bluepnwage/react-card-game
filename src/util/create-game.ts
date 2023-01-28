@@ -22,5 +22,5 @@ export function createGame() {
     });
     cardPositions[i] = newPosition as [string, string, string];
   }
-  return cardPositions;
+  return [[]];
 }
