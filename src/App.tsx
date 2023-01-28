@@ -3,27 +3,42 @@ import "./App.css";
 import { createGame } from "./util/create-game";
 const game = createGame();
 
+type Entry = {
+  x: number;
+  y: number;
+  value: string;
+};
+
 type PlayPicks = {
-  first: string;
-  second: string;
+  first: Entry;
+  second: Entry;
 };
 
 function App() {
   const [selected, setSelected] = useState<Partial<PlayPicks>>({});
+  const [successfulSelections, setSuccessful] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (selected.first && selected.second) {
       const check = checkPosition();
       if (check) {
-        alert("nice");
+        setSuccessful((prev) => [...prev, selected.first?.value!]);
+        setSelected({});
       } else {
-        alert("bruh");
+        setLoading(true);
+        setTimeout(() => {
+          setSelected({});
+          setLoading(false);
+        }, 1000);
       }
-      setSelected({});
-      return;
     }
   }, [selected]);
 
-  const onSelect = (value: string) => {
+  useEffect(() => {
+    if (successfulSelections.length === 6) alert("Game completed!!");
+  }, [successfulSelections]);
+
+  const onSelect = (value: Entry) => {
     if (!selected.first) {
       setSelected((prev) => ({ ...prev, first: value }));
     } else {
@@ -32,7 +47,13 @@ function App() {
   };
 
   const checkPosition = () => {
-    return selected.first === selected.second;
+    return selected.first?.value === selected.second?.value;
+  };
+
+  const checkSelected = (y: number, x: number) => {
+    const first = selected.first?.y === y && selected.first?.x === x;
+    const second = selected.second?.y === y && selected.second?.x === x;
+    return first || second;
   };
 
   return (
@@ -40,11 +61,18 @@ function App() {
       <div className="game-wrapper">
         {game.map((position, yPosition) => {
           return (
-            <div key={yPosition} className="game-container">
+            <div key={yPosition} className="game-row">
               {position.map((symbol, xPosition) => {
+                const checked = successfulSelections.includes(symbol);
+                const s = checkSelected(yPosition, xPosition);
                 return (
-                  <div onClick={() => onSelect(symbol)} className="game-card" key={xPosition}>
-                    {symbol}
+                  <div
+                    onClick={!loading ? () => onSelect({ value: symbol, x: xPosition, y: yPosition }) : undefined}
+                    className="game-card"
+                    data-complete={checked}
+                    key={xPosition}
+                  >
+                    {s ? symbol : checked ? symbol : null}
                   </div>
                 );
               })}

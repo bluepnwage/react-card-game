@@ -19,7 +19,7 @@
   justify-content: center;
   align-items: center;
 }
-.game-container {
+.game-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   width: 75%;
@@ -29,7 +29,7 @@
   margin-bottom: 5px;
 }
 
-.game-container:last-of-type {
+.game-row:last-of-type {
   margin-bottom: 0px;
 }
 
@@ -44,4 +44,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.game-card[data-complete="true"] {
+  border: 1px solid red;
 }
