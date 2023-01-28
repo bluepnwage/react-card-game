@@ -44,6 +44,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  /* animation: flip-with-rotate 1s infinite; */
+  perspective: 400px;
 }
 
 .game-card[data-complete="true"] {
