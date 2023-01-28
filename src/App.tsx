@@ -20,6 +20,19 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [moves, setMoves] = useState(0);
   useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").then((status) => {
+        if (status.active) {
+          console.log("Service worker active");
+        } else if (status.installing) {
+          console.log("Service worker installing");
+        } else {
+          console.log("bruh");
+        }
+      });
+    }
+  }, []);
+  useEffect(() => {
     if (selected.first && selected.second) {
       const check = checkPosition();
       if (check) {
