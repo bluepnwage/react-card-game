@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import { createGame } from "./util/create-game";
-import { motion, AnimatePresence } from "framer-motion";
-type Entry = {
+import { Card } from "./Card";
+export type Entry = {
   x: number;
   y: number;
   value: string;
@@ -89,31 +89,15 @@ function App() {
               {position.map((symbol, xPosition) => {
                 const checked = successfulSelections.includes(symbol);
                 const s = checkSelected(yPosition, xPosition);
+                const entry = { value: symbol, x: xPosition, y: yPosition };
                 return (
-                  <motion.div
-                    initial={false}
-                    animate={{ rotateY: s ? 0 : checked ? 0 : 180 }}
-                    transition={{ duration: 0.5 }}
-                    onClick={!loading ? () => onSelect({ value: symbol, x: xPosition, y: yPosition }) : undefined}
-                    className="game-card"
-                    data-complete={checked}
-                    key={xPosition}
-                  >
-                    <AnimatePresence>
-                      {(s || checked) && (
-                        <motion.img
-                          key={`${symbol}-${yPosition}-${xPosition}`}
-                          exit={{ opacity: 0, transition: { duration: 0.25, delay: 0 } }}
-                          src={`/${symbol}.webp`}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.25, duration: 0.25 }}
-                          width={"100%"}
-                          height={"100%"}
-                        />
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
+                  <Card
+                    key={`${yPosition}-${xPosition}`}
+                    complete={checked}
+                    selected={s}
+                    entry={entry}
+                    onClick={!loading ? onSelect : undefined}
+                  />
                 );
               })}
             </div>

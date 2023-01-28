@@ -3,7 +3,17 @@ async function addToCache(resources) {
   await cache.addAll(resources);
 }
 self.addEventListener("install", async (event) => {
-  event.waitUntil(addToCache(["/index.html"]));
+  event.waitUntil(
+    addToCache([
+      "/index.html",
+      "/1164609-sm.webp",
+      "/1168620-sm.webp",
+      "/1293302-sm.webp",
+      "/315305-sm.webp",
+      "/7298913-sm.webp",
+      "/966314-sm.webp"
+    ])
+  );
 });
 
 async function putInCache(request, response) {
