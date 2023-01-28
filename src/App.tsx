@@ -53,11 +53,7 @@ function App() {
   };
 
   const checkPosition = () => {
-    return (
-      selected.first?.value === selected.second?.value &&
-      selected.first?.x !== selected.second?.x &&
-      selected.second?.y !== selected.first?.y
-    );
+    return selected.first?.value === selected.second?.value;
   };
 
   const checkSelected = (y: number, x: number) => {
