@@ -21,3 +21,22 @@ test("each row has 3 items", () => {
   });
   expect(hasThree).toBeTruthy();
 });
+
+test("each item appears 2 times", () => {
+  let appearsTwice = true;
+  const game = createGame();
+  const items: { [value: string]: number } = {};
+  game.forEach((row) => {
+    row.forEach((value) => {
+      if (items[value]) {
+        items[value]++;
+      } else {
+        items[value] = 1;
+      }
+    });
+  });
+  Object.values(items).forEach((value) => {
+    if (value !== 2) appearsTwice = false;
+  });
+  expect(appearsTwice).toBeTruthy();
+});

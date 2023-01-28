@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import { createGame } from "./util/create-game";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 type Entry = {
   x: number;
   y: number;
@@ -19,7 +19,6 @@ function App() {
   const [game, setGame] = useState(createGame());
   const [loading, setLoading] = useState(false);
   const [moves, setMoves] = useState(0);
-  const [complete, setComplete] = useState(false);
   useEffect(() => {
     if (selected.first && selected.second) {
       const check = checkPosition();
@@ -35,10 +34,6 @@ function App() {
       }
     }
   }, [selected]);
-
-  useEffect(() => {
-    if (successfulSelections.length === 6) setComplete(true);
-  }, [successfulSelections]);
 
   const onSelect = (value: Entry) => {
     if (successfulSelections.includes(value.value)) return;
@@ -64,7 +59,6 @@ function App() {
 
   const resetGame = () => {
     setSuccessful([]);
-    setComplete(false);
     setGame(createGame());
     setMoves(0);
   };
@@ -73,7 +67,7 @@ function App() {
     <div className="App">
       <div>
         <p>Moves: {moves}</p>
-        {complete && <button onClick={resetGame}>Reset</button>}
+        <button onClick={resetGame}>Reset</button>
       </div>
       <div className="game-wrapper">
         {game.map((position, yPosition) => {
@@ -92,15 +86,20 @@ function App() {
                     data-complete={checked}
                     key={xPosition}
                   >
-                    {(s || checked) && (
-                      <motion.span
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.25, duration: 0.25 }}
-                      >
-                        {symbol}
-                      </motion.span>
-                    )}
+                    <AnimatePresence>
+                      {(s || checked) && (
+                        <motion.img
+                          key={`${symbol}-${yPosition}-${xPosition}`}
+                          exit={{ opacity: 0, transition: { duration: 0.25, delay: 0 } }}
+                          src={`/${symbol}.webp`}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.25, duration: 0.25 }}
+                          width={"100%"}
+                          height={"100%"}
+                        />
+                      )}
+                    </AnimatePresence>
                   </motion.div>
                 );
               })}

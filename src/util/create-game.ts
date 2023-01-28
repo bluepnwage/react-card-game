@@ -1,4 +1,4 @@
-const symbols = ["x", "y", "a", "z", "q", "m"];
+const symbols = ["1164609-sm", "1168620-sm", "1293302-sm", "315305-sm", "7298913-sm", "966314-sm"];
 
 export function createGame() {
   const doubles = [...symbols, ...symbols];
@@ -8,10 +8,7 @@ export function createGame() {
     ["", "", ""],
     ["", "", ""]
   ];
-  const rows: Record<string, number> = {};
-  symbols.forEach((symbol) => {
-    rows[symbol] = 0;
-  });
+
   for (let i = 0; i < cardPositions.length; i++) {
     const position = cardPositions[i];
     const newPosition = position.map(() => {
